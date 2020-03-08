@@ -1,0 +1,11 @@
+.row {
+  height: 50px;
+  width: 100%;
+  display: flex;
+}
+
+@media(max-width:415px){
+  .row{
+    height: 25px;
+  }
+}

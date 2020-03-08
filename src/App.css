@@ -1,0 +1,11 @@
+.App {
+  text-align: center;
+}
+
+.player-one-turn{
+  color:yellow;
+}
+
+.player-two-turn{
+  color:blue;
+}

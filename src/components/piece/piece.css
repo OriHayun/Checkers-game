@@ -1,0 +1,33 @@
+.player-one, .player-two {
+    border-radius: 50%;
+    width: 75%;
+    height: 75%;
+    border: 1px solid black;
+  }
+  
+  span.player-one, span.player-two {
+    left: 10px;
+    margin-bottom: -3px;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+  }
+  
+  .player-one {
+    background-color: yellow;
+  }
+  
+  .player-two {
+    background-color: blue;
+  }
+
+  .king::before {
+    content: '';
+    display: block;
+    width: 35px;
+    height: 25px;
+    background-image: url('../../assetes/crown.png');
+    background-size: 100% 100%;
+    background-position: 0px 2px;
+    background-repeat: no-repeat; 
+  }

@@ -1,0 +1,15 @@
+.actionBtn{
+padding: 10px 40px;
+margin: 0 10px;
+}
+.undo{
+background-color: burlywood;
+}
+
+.redo{
+    background-color: cadetblue;
+}
+
+.finish{
+background-color: chartreuse;
+}
