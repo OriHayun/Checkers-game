@@ -63,8 +63,10 @@ Board.prototype.buildCheckersArray = function (size, player_one, player_two) {
 }
 
 Board.prototype.checkIfValid = function (selectedChecker/*11*/, nextRow, nextCol) {
-
-    //let forceJump = this.forceJump(selectedChecker);
+    let turn = this.checkers[selectedChecker].player
+    if (!this.forceJump(selectedChecker, turn)) {
+        return false
+    }
 
     let allMoves = this.getAllMoves(selectedChecker);
     for (let move in allMoves.singles) {
@@ -78,29 +80,40 @@ Board.prototype.checkIfValid = function (selectedChecker/*11*/, nextRow, nextCol
         }
     }
     return false;
-
-
 }
 
-Board.prototype.forceJump = function (selectedChecker) {
-    //אם לחייל יש חובת אכילה מעולה 
-    //אם לחייב אין חובה אכילה אבל לחייל אחר כן יש מהלך לא חוקי
+Board.prototype.forceJump = function (selectedChecker, turn) {
     let checkers = this.checkers;
-    let availableCheckers = [];
+    let counter = 0
+    //אם לשחקן שבחרתי יש קפיצה
+    let selectedCheckerMoves = this.getAllMoves(this.board[checkers[selectedChecker].row][checkers[selectedChecker].col])
+    if (selectedCheckerMoves.jumps.length) {
+        return true
+    }
+    //אם למישהו אחר יש קפיצה 
     for (let i = 0; i < checkers.length; i++) {
-        let cMoves = this.getAllMoves(this.board[checkers[i].row][checkers[i].col]);
-        if (cMoves.jumps.length) {
-            availableCheckers.push(this.board[checkers[i].row][checkers[i].col])
+        if (this.board[checkers[i].row][checkers[i].col]) {
+            if (checkers[i].removed == false && checkers[i].player == turn) {
+                let selectedCheckerMoves = this.getAllMoves(this.board[checkers[i].row][checkers[i].col])
+                if (selectedCheckerMoves.jumps.length) {
+                    debugger
+                    return false;
+                }
+            }
+
         }
     }
 
-    for (let i = 0; i < availableCheckers.length; i++) {
-        if (availableCheckers[i] == selectedChecker) {
-            return true;
+    /*for (let i = 0; i < tmpCheckers.length; i++) {
+        if (this.board[tmpCheckers[i].row][tmpCheckers[i].col]) {
+            console.log(tmpCheckers[i].row,tmpCheckers[i].col)
+            let selectedCheckerMoves = this.getAllMoves(this.board[tmpCheckers[i].row][tmpCheckers[i].col])
+            if (selectedCheckerMoves.jumps.length) {
+                return false;
+            }
         }
-    }
-    return false;
-
+    }*/
+    return true;
 }
 
 Board.prototype.getAllMoves = function (selectedChecker) {

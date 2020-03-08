@@ -87,7 +87,7 @@ class App extends Component {
       becameKing = true;
       board.makeKing(selectedChecker);
     }
-
+    //this.setState({undoBtn:""})
     if (!becameKing && isJump && board.canKeepJumping(selectedChecker)) {
       this.setState({ board: board, selectedSquare: { row: nextRow, column: nextColumn } });
     } else {
