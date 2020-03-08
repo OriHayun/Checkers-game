@@ -5,7 +5,6 @@ import './board.css';
 
 const gameBoard = (props) => {
 
-    console.log(props.board)
 
     let selectedRow = props.selectedSquare ? props.selectedSquare.row : null;
 

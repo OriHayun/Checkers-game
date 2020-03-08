@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import GameBoard from './components/board/board.jsx';
 import ActionBtn from './components/actionBtn/actionBtn.jsx';
+import Winner from './components/winner/winner.jsx';
 
 import Board from './models/board';
 
@@ -34,6 +35,16 @@ class App extends Component {
     };
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.turn != this.state.turn) {
+      let board = this.state.board;
+      if (!board.hasMoves(this.state.turn)) {
+        console.log("no available moves");
+        this.setState({ winner: this.nextPlayer() });
+      }
+    }
+  }
+
   selectedSquare = (row, column) => {
     let selected = this.state.selectedSquare;
     if (this.canSelectSquare(row, column)) {
@@ -46,8 +57,8 @@ class App extends Component {
 
   canSelectSquare = (row, column) => {
     let square = this.state.board.board[row][column];
-    if(square===0){
-      square=1;
+    if (square === 0) {
+      square = 1;
     }
     if (!square) {
       return false;
@@ -88,8 +99,14 @@ class App extends Component {
     return (this.state.turn == PLAYER_ONE ? PLAYER_TWO : PLAYER_ONE);
   }
 
-
-
+  restart = () => {
+    this.setState({
+      board: new Board(PLAYER_ONE, PLAYER_TWO,BOARD_SIZE),
+      turn: PLAYER_ONE,
+      selectedSquare: null,
+      winner: null
+    });
+  }
 
   render() {
 
@@ -101,6 +118,9 @@ class App extends Component {
           <h1>Checker - React </h1>
         </div>
         <h2 className={classTurn}>current turn : player {this.state.turn}</h2>
+        {this.state.winner &&
+          <Winner PLAYER={PLAYERS} winner={this.state.winner} restart={this.restart} />
+        }
         <div>
           <GameBoard
             board={this.state.board}

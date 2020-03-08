@@ -63,10 +63,10 @@ Board.prototype.buildCheckersArray = function (size, player_one, player_two) {
 }
 
 Board.prototype.checkIfValid = function (selectedChecker/*11*/, nextRow, nextCol) {
-    console.log(nextRow,nextCol)
+
+    //let forceJump = this.forceJump(selectedChecker);
 
     let allMoves = this.getAllMoves(selectedChecker);
-    console.log(allMoves);
     for (let move in allMoves.singles) {
         if (allMoves.singles[move].row == nextRow && allMoves.singles[move].col == nextCol) {
             return true
@@ -79,6 +79,27 @@ Board.prototype.checkIfValid = function (selectedChecker/*11*/, nextRow, nextCol
     }
     return false;
 
+
+}
+
+Board.prototype.forceJump = function (selectedChecker) {
+    //אם לחייל יש חובת אכילה מעולה 
+    //אם לחייב אין חובה אכילה אבל לחייל אחר כן יש מהלך לא חוקי
+    let checkers = this.checkers;
+    let availableCheckers = [];
+    for (let i = 0; i < checkers.length; i++) {
+        let cMoves = this.getAllMoves(this.board[checkers[i].row][checkers[i].col]);
+        if (cMoves.jumps.length) {
+            availableCheckers.push(this.board[checkers[i].row][checkers[i].col])
+        }
+    }
+
+    for (let i = 0; i < availableCheckers.length; i++) {
+        if (availableCheckers[i] == selectedChecker) {
+            return true;
+        }
+    }
+    return false;
 
 }
 
@@ -189,6 +210,32 @@ Board.prototype.canKeepJumping = function (selectedChecker) {
     return false;
 }
 
+Board.prototype.hasMoves = function (player) {
+    let checkers = this.checkers;
+    if (player == 1) {
+        let counter = 0
+        for (let i = 0; i < 12; i++) {
+            if (checkers[i].removed == true) {
+                counter++
+            }
+        }
+        if (counter == 12) {
+            return false;
+        }
+    }
+    else {
+        let counter = 0;
+        for (let i = 12; i < 24; i++) {
+            if (checkers[i].removed == true) {
+                counter++
+            }
+        }
+        if (counter == 12) {
+            return false;
+        }
+    }
+    return true;
+}
 
 module.exports = Board;
 
