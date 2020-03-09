@@ -1,5 +1,7 @@
 import React from 'react';
 
+import './winner.css';
+
 
 const winner = (props) =>{
     let player = props.PLAYER[props.winner].name;

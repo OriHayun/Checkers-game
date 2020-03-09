@@ -117,7 +117,7 @@ class App extends Component {
         <div>
           <h1>Checker - React </h1>
         </div>
-        <h2 className={classTurn}>current turn : player {this.state.turn}</h2>
+        <h2 className={classTurn}>current turn :  {this.state.turn ==1?"Ori Hayun":"Raz Gross"}</h2>
         {this.state.winner &&
           <Winner PLAYER={PLAYERS} winner={this.state.winner} restart={this.restart} />
         }
