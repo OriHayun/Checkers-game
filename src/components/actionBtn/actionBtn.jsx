@@ -12,7 +12,7 @@ const actionBtn = (props) => {
         );
     }
     return (
-        <button className={classes}>{props.name}</button>
+        <button className={classes} onClick={props.func}>{props.name}</button>
     );
 }
 export default actionBtn;

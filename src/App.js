@@ -29,9 +29,11 @@ class App extends Component {
       turn: PLAYER_ONE,
       selectedSquare: null,
       winner: null,
+      lastBoard:null,
+      lastSelectedSquare:null,
+      lastTurn:null,
       undoBtn: "disabled",
       redoBtn: "disabled",
-      finishBtn: "disabled"
     };
   }
 
@@ -57,6 +59,7 @@ class App extends Component {
 
   canSelectSquare = (row, column) => {
     let square = this.state.board.board[row][column];
+    
     if (square === 0) {
       square = 1;
     }
@@ -78,6 +81,7 @@ class App extends Component {
 
     let isJump = board.isJumpMove(selectedChecker, nextRow); //return true or false
     let becameKing = false;
+    this.setState({undoBtn:""})
     board.moveChecker(selectedChecker, nextRow, nextColumn);
     if (!board.isKing(selectedChecker) &&
       (board.getPlayer(selectedChecker) == PLAYER_ONE && nextRow == 0)
@@ -87,7 +91,7 @@ class App extends Component {
       becameKing = true;
       board.makeKing(selectedChecker);
     }
-    //this.setState({undoBtn:""})
+    
     if (!becameKing && isJump && board.canKeepJumping(selectedChecker)) {
       this.setState({ board: board, selectedSquare: { row: nextRow, column: nextColumn } });
     } else {
@@ -101,11 +105,30 @@ class App extends Component {
 
   restart = () => {
     this.setState({
-      board: new Board(PLAYER_ONE, PLAYER_TWO,BOARD_SIZE),
+      board: new Board(PLAYER_ONE, PLAYER_TWO, BOARD_SIZE),
       turn: PLAYER_ONE,
       selectedSquare: null,
-      winner: null
+      winner: null,
+      lastBoard:null,
+      lastSelectedSquare:null,
+      lastTurn:null,
+      undoBtn: "disabled",
+      redoBtn: "disabled",
     });
+  }
+
+  undoBtn = () => {
+    this.setState({
+      undoBtn:"disabled",
+      redoBtn:""
+    })
+  }
+
+  redoBtn = () => {
+    this.setState({
+      undoBtn:"",
+      redoBtn:"disabled"
+    })
   }
 
   render() {
@@ -117,7 +140,7 @@ class App extends Component {
         <div>
           <h1>Checker - React </h1>
         </div>
-        <h2 className={classTurn}>current turn :  {this.state.turn ==1?"Ori Hayun":"Raz Gross"}</h2>
+        <h2 className={classTurn}>current turn :  {this.state.turn == 1 ? "Ori Hayun" : "Raz Gross"}</h2>
         {this.state.winner &&
           <Winner PLAYER={PLAYERS} winner={this.state.winner} restart={this.restart} />
         }
@@ -129,9 +152,8 @@ class App extends Component {
             selectedSquareFunc={this.selectedSquare}
           />
         </div>
-        <ActionBtn name="<< Undo" btnClass="undo" disabled={this.state.undoBtn} />
-        <ActionBtn name="Finish" btnClass="finish" disabled={this.state.finishBtn} />
-        <ActionBtn name="Redo >>" btnClass="redo" disabled={this.state.redoBtn} />
+        <ActionBtn name="<< Undo" btnClass="undo" disabled={this.state.undoBtn} func={this.undoBtn} />
+        <ActionBtn name="Redo >>" btnClass="redo" disabled={this.state.redoBtn} func={this.redoBtn} />
       </div>
     );
   }
