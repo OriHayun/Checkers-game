@@ -29,9 +29,6 @@ class App extends Component {
       turn: PLAYER_ONE,
       selectedSquare: null,
       winner: null,
-      lastBoard:null,
-      lastSelectedSquare:null,
-      lastTurn:null,
       undoBtn: "disabled",
       redoBtn: "disabled",
     };
@@ -59,7 +56,7 @@ class App extends Component {
 
   canSelectSquare = (row, column) => {
     let square = this.state.board.board[row][column];
-    
+
     if (square === 0) {
       square = 1;
     }
@@ -81,7 +78,7 @@ class App extends Component {
 
     let isJump = board.isJumpMove(selectedChecker, nextRow); //return true or false
     let becameKing = false;
-    this.setState({undoBtn:""})
+    this.setState({ undoBtn: "" })
     board.moveChecker(selectedChecker, nextRow, nextColumn);
     if (!board.isKing(selectedChecker) &&
       (board.getPlayer(selectedChecker) == PLAYER_ONE && nextRow == 0)
@@ -91,7 +88,7 @@ class App extends Component {
       becameKing = true;
       board.makeKing(selectedChecker);
     }
-    
+
     if (!becameKing && isJump && board.canKeepJumping(selectedChecker)) {
       this.setState({ board: board, selectedSquare: { row: nextRow, column: nextColumn } });
     } else {
@@ -109,25 +106,34 @@ class App extends Component {
       turn: PLAYER_ONE,
       selectedSquare: null,
       winner: null,
-      lastBoard:null,
-      lastSelectedSquare:null,
-      lastTurn:null,
+      lastBoard: null,
+      lastSelectedSquare: null,
+      lastTurn: null,
       undoBtn: "disabled",
       redoBtn: "disabled",
     });
   }
 
   undoBtn = () => {
+    
+    let prevSituation = JSON.parse(localStorage.getItem('store'));
+    console.log(prevSituation)
+
     this.setState({
-      undoBtn:"disabled",
-      redoBtn:""
-    })
+      board: prevSituation.board,
+      turn: prevSituation.turn,
+      selectedSquare: prevSituation.selectedSquare,
+      undoBtn: "disabled",
+      redoBtn: ""
+    },()=>console.log(this.state))
+    debugger
+
   }
 
   redoBtn = () => {
     this.setState({
-      undoBtn:"",
-      redoBtn:"disabled"
+      undoBtn: "",
+      redoBtn: "disabled"
     })
   }
 
@@ -152,7 +158,7 @@ class App extends Component {
             selectedSquareFunc={this.selectedSquare}
           />
         </div>
-        <ActionBtn name="<< Undo" btnClass="undo" disabled={this.state.undoBtn} func={this.undoBtn} />
+        <ActionBtn name="<< Undo" btnClass="undo" disabled={this.state.undoBtn}  />
         <ActionBtn name="Redo >>" btnClass="redo" disabled={this.state.redoBtn} func={this.redoBtn} />
       </div>
     );

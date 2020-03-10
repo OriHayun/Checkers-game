@@ -4,10 +4,7 @@ import Row from '../row/row.jsx';
 import './board.css';
 
 const gameBoard = (props) => {
-
-
     let selectedRow = props.selectedSquare ? props.selectedSquare.row : null;
-
     let rows = props.board.board.map((row, index) => {
         return (
             <Row

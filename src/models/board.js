@@ -5,6 +5,8 @@ function Board(player_one, player_two, size) {
     this.checkers = this.buildCheckersArray(size, player_one, player_two)
 }
 
+
+
 Board.prototype.createBoard = function (size) {
     let board = [];
 
@@ -185,8 +187,17 @@ Board.prototype.isJumpMove = function (selectedChecker, row) {
 
 Board.prototype.moveChecker = function (selectedChecker, row, col) {
     let c = this.checkers[selectedChecker];
+    debugger
+    let store = {
+        board: new Board(this.player_one, this.player_two,8),
+        selectedSquare: selectedChecker,
+        turn: c.player
+    }
+    localStorage.setItem('store', JSON.stringify(store));
+    console.log(JSON.parse(localStorage.getItem('store')))
     let cRow = c.row;
     let cCol = c.col;
+
     if (this.isJumpMove(selectedChecker, row)) {
         let midRow = (cRow + row) / 2;
         let midCol = (cCol + col) / 2;
