@@ -89,11 +89,11 @@ class App extends Component {
       board.makeKing(selectedChecker);
     }
 
-    /*if (!becameKing && isJump && board.canKeepJumping(selectedChecker)) {
+    if (!becameKing && isJump && board.canKeepJumping(selectedChecker)) {
       this.setState({ board: board, selectedSquare: { row: nextRow, column: nextColumn } });
-    } else {*/
+    } else {
       this.setState({ board: board, turn: this.nextPlayer(), selectedSquare: null });
-    //}
+    }
   }
 
   nextPlayer = () => {
