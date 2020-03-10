@@ -6,7 +6,6 @@ function Board(player_one, player_two, size) {
 }
 
 
-
 Board.prototype.createBoard = function (size) {
     let board = [];
 
@@ -98,7 +97,6 @@ Board.prototype.forceJump = function (selectedChecker, turn) {
             if (checkers[i].removed == false && checkers[i].player == turn) {
                 let selectedCheckerMoves = this.getAllMoves(this.board[checkers[i].row][checkers[i].col])
                 if (selectedCheckerMoves.jumps.length) {
-                    debugger
                     return false;
                 }
             }
@@ -187,14 +185,17 @@ Board.prototype.isJumpMove = function (selectedChecker, row) {
 
 Board.prototype.moveChecker = function (selectedChecker, row, col) {
     let c = this.checkers[selectedChecker];
-    debugger
-    let store = {
-        board: new Board(this.player_one, this.player_two,8),
+    let prevSituation = {
+        board: {
+            player_one: this.player_one,
+            player_two: this.player_two,
+            board: this.board,
+            checkers: this.checkers
+        },
         selectedSquare: selectedChecker,
         turn: c.player
     }
-    localStorage.setItem('store', JSON.stringify(store));
-    console.log(JSON.parse(localStorage.getItem('store')))
+    localStorage.setItem('prevSituation', JSON.stringify(prevSituation));
     let cRow = c.row;
     let cCol = c.col;
 

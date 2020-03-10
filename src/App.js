@@ -89,11 +89,11 @@ class App extends Component {
       board.makeKing(selectedChecker);
     }
 
-    if (!becameKing && isJump && board.canKeepJumping(selectedChecker)) {
+    /*if (!becameKing && isJump && board.canKeepJumping(selectedChecker)) {
       this.setState({ board: board, selectedSquare: { row: nextRow, column: nextColumn } });
-    } else {
+    } else {*/
       this.setState({ board: board, turn: this.nextPlayer(), selectedSquare: null });
-    }
+    //}
   }
 
   nextPlayer = () => {
@@ -115,26 +115,56 @@ class App extends Component {
   }
 
   undoBtn = () => {
-    
-    let prevSituation = JSON.parse(localStorage.getItem('store'));
+    let nextSituation = {
+      board: {
+        player_one: this.state.player_one,
+        player_two: this.state.player_two,
+        board: this.state.board,
+        checkers: this.state.board.checkers
+      },
+      selectedSquare: this.state.selectedSquare,
+      turn: this.state.turn
+    }
+    localStorage.setItem('nextSituation',JSON.stringify(nextSituation));
+
+    let prevSituation = JSON.parse(localStorage.getItem('prevSituation'));
     console.log(prevSituation)
 
+    let b = new Board()
+    b.player_one = prevSituation.board.player_one;
+    b.player_two = prevSituation.board.player_two;
+    b.board = prevSituation.board.board;
+    b.checkers = prevSituation.board.checkers;
+    console.log(b)
+
     this.setState({
-      board: prevSituation.board,
+      board: b,
       turn: prevSituation.turn,
       selectedSquare: prevSituation.selectedSquare,
       undoBtn: "disabled",
       redoBtn: ""
-    },()=>console.log(this.state))
-    debugger
-
+    }, () => console.log(this.state))
   }
 
   redoBtn = () => {
+
+    let nextSituation = JSON.parse(localStorage.getItem('nextSituation'));
+    console.log(nextSituation);
+
+    let b = new Board()
+    b.player_one = nextSituation.board.board.player_one;
+    b.player_two = nextSituation.board.board.player_two;
+    b.board = nextSituation.board.board.board;
+    b.checkers = nextSituation.board.board.checkers;
+    console.log(b)
+
     this.setState({
+      board: b,
+      turn: nextSituation.turn,
+      selectedSquare: nextSituation.selectedSquare,
       undoBtn: "",
       redoBtn: "disabled"
-    })
+    }, () => console.log(this.state))
   }
 
   render() {
@@ -158,7 +188,7 @@ class App extends Component {
             selectedSquareFunc={this.selectedSquare}
           />
         </div>
-        <ActionBtn name="<< Undo" btnClass="undo" disabled={this.state.undoBtn}  />
+        <ActionBtn name="<< Undo" btnClass="undo" disabled={this.state.undoBtn} func={this.undoBtn} />
         <ActionBtn name="Redo >>" btnClass="redo" disabled={this.state.redoBtn} func={this.redoBtn} />
       </div>
     );
