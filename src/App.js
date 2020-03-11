@@ -4,6 +4,8 @@ import GameBoard from './components/board/board.jsx';
 import ActionBtn from './components/actionBtn/actionBtn.jsx';
 import Winner from './components/winner/winner.jsx';
 
+import LandingPage from './components/landingPage/landingPage.jsx';
+
 import Board from './models/board';
 
 const BOARD_SIZE = 8;
@@ -42,6 +44,10 @@ class App extends Component {
         this.setState({ winner: this.nextPlayer() });
       }
     }
+  }
+
+  startGame = () => {
+    this.setState({ started: 1 })
   }
 
   selectedSquare = (row, column) => {
@@ -111,6 +117,7 @@ class App extends Component {
       lastTurn: null,
       undoBtn: "disabled",
       redoBtn: "disabled",
+      started: null
     });
   }
 
@@ -125,7 +132,7 @@ class App extends Component {
       selectedSquare: this.state.selectedSquare,
       turn: this.state.turn
     }
-    localStorage.setItem('nextSituation',JSON.stringify(nextSituation));
+    localStorage.setItem('nextSituation', JSON.stringify(nextSituation));
 
     let prevSituation = JSON.parse(localStorage.getItem('prevSituation'));
     console.log(prevSituation)
@@ -173,13 +180,16 @@ class App extends Component {
 
     return (
       <div className="App">
+        {!this.state.started &&
+          <LandingPage startGame={this.startGame} />
+        }
+        {this.state.winner &&
+          <Winner PLAYER={PLAYERS} winner={this.state.winner} restart={this.restart} />
+        }
         <div>
           <h1>Checker - React </h1>
         </div>
         <h2 className={classTurn}>current turn :  {this.state.turn == 1 ? "Ori Hayun" : "Raz Gross"}</h2>
-        {this.state.winner &&
-          <Winner PLAYER={PLAYERS} winner={this.state.winner} restart={this.restart} />
-        }
         <div>
           <GameBoard
             board={this.state.board}
